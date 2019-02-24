@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2019_02_24_141631) do
   enable_extension "plpgsql"
 
   create_table "item_trades", force: :cascade do |t|
-    t.integer "name"
+    t.string "name"
     t.float "value"
     t.integer "quantity"
     t.datetime "created_at", null: false

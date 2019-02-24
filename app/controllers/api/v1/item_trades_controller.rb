@@ -7,7 +7,7 @@ class Api::V1::ItemTradesController < ApplicationController
 	end
 
 	def create
-		item = ItemTrade.new (itemTrade_params)
+		itemTrade = ItemTrade.new (itemTrade_params)
 
 		if itemTrade.save 
 			render json: itemTrade, status: :created and return

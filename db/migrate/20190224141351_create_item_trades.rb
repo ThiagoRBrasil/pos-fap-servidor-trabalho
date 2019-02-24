@@ -1,7 +1,7 @@
 class CreateItemTrades < ActiveRecord::Migration[5.2]
   def change
     create_table :item_trades do |t|
-      t.integer :name
+      t.string :name
       t.float :value
       t.integer :quantity
 
