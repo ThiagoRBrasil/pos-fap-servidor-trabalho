@@ -1,4 +1,5 @@
 class Api::V1::ItemTradesController < ApplicationController
+	before_action :find_itemTrade, only: [:destroy]
 
 	def index
 		itemTrade = ItemTrade.where trade_id: params[:trade_id]
@@ -10,7 +11,7 @@ class Api::V1::ItemTradesController < ApplicationController
 
 		if itemTrade.save 
 			render json: itemTrade, status: :created and return
-		elsif itemTrade.nil_fields?
+		elsif itemTrade.has_nil_fields?
 			error_status = :bad_request
 		else
 			error_status = :unprocessable_entity
@@ -24,10 +25,10 @@ class Api::V1::ItemTradesController < ApplicationController
 	end
 
 	def show
-		itemTrade = ItemTrrade.find_by trade_id: params[:trade_id]
+		itemTrade = ItemTrade.find_by trade_id: params[:trade_id]
 
 		if itemTrade.nil?
-			render json: {message: "Pieces not found"}, status: :not_found
+			render json: {message: "Item Trade not found"}, status: :not_found
 		else
 			render json: itemTrade, status: :ok	
 		end
@@ -36,10 +37,13 @@ class Api::V1::ItemTradesController < ApplicationController
 	private
 	def find_itemTrade
 		@itemTrade = ItemTrade.find_by_id(params[:id])
+		if @itemTrade.nil?
+			render json: {message: "Item Trade not found"}, status: :not_found and return
+		end
 	end
 
 	def itemTrade_params
-		params.permit(:name, :value, :quantity, :product_id)
+		params.permit(:name, :value, :quantity, :trade_id)
 	end
 
 end
