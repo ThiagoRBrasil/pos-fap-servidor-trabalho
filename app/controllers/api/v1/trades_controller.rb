@@ -5,6 +5,40 @@ class Api::V1::TradesController < ApplicationController
 		render json: Trade.all, status: :ok
 	end
 
+	def orderByGasto
+		trader = Trade.all
+		
+		array = []
+		trader.each do |trade|
+			valorTotal = 0
+			trade.item_trades.each do |valorTrader|
+				valorTotal = valorTotal + valorTrader.value
+			end
+			array.push({:consumerName => trade.consumerName, :total => valorTotal})
+		end
+
+		array = array.sort_by { |h | -h[:total] }
+
+		render json: array, status: :ok
+	end
+
+	def orderByQtd
+		trader = Trade.all
+
+		array = []
+		trader.each do |trade|
+			valorTotal = 0
+			trade.item_trades.each do |valorTrader|
+				valorTotal = valorTotal + valorTrader.quantity
+			end
+			array.push({:consumerName => trade.consumerName, :total => valorTotal})
+		end
+
+		array = array.sort_by { |h | -h[:total] }
+
+		render json: array, status: :ok
+	end
+
 	def show
 		render json: @trade, status: :ok
 	end

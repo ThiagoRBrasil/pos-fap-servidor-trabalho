@@ -34,6 +34,18 @@ class Api::V1::ItemTradesController < ApplicationController
 		end
 	end
 
+	def update
+		if @itemTrade.update (itemTrade_params)
+			render json: @itemTrade, status: :ok and return
+		elsif @itemTrade.has_nil_fields?
+			error_status = :bad_request
+		elsif
+			error_status = :unprocessable_entity
+		end
+
+		render json: {message: 'Trade not updated', errors: @trade.errors}, status: error_status
+	end
+
 	private
 	def find_itemTrade
 		@itemTrade = ItemTrade.find_by_id(params[:id])
